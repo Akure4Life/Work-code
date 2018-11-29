@@ -1,0 +1,771 @@
+<nav class="navbar-custom">
+        
+  <div class="container">
+    <div class="row align-items-center">
+      <div id="lmca" class="col-md offset-md">LMCA</div>
+      <div class="col-md offset-md-8"><a routerLink="/" class="heading">HOME</a></div>
+      <div class="col-md alignment"><a class="heading">SIGN-UP</a></div>
+    </div>            
+  </div>
+</nav>  
+<form #claimForm="ngForm" (ngSubmit)="submitUpdate()">
+<div class="container">
+    <h1 id="claimFormH1" class="text-center">UCSR #{{uniqueClaimsSubmissionReference}}</h1>
+    <h2 id="claimFormH2" class="text-center">Property Claim</h2>
+    <div class="timeline_container">
+    <div class="row dates_row">
+      <div class="col justify-content-center">
+        <div class="progress_dates" *ngIf="claimantSubmissionDateTimeUTC">{{daysNumbers()}} days</div>
+    </div>
+    <div class="col justify-content-center">
+        <div class="progress_dates" *ngIf="BrokerFirstViewDateTimeUTC">
+          {{daysNumbersBroker()}} days
+        </div>
+    </div>
+        <div class="col justify-content-center">
+            <div class="progress_dates" style="margin-left: 138px;"  *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC">
+              {{daysNumbersCarrier()}} days
+            </div>
+        </div>
+        <div class="col justify-content-center">
+            <div class="progress_dates" style="margin-left: 115px;" *ngIf="CarrierApprovalDateTimeUTC">{{daysNumbersApproved()}} days</div>
+        </div>
+        <div class="col"></div>
+      </div>
+      <div class="row status_row">
+          <div class="col">
+            <div class="claim_nonactive">Date of Loss</div>
+          </div>
+          <div class="col">
+            <div class="claim_nonactive" *ngIf="status !== 'Submitted'">Claim Submitted</div>
+            <div class="claim_active" *ngIf="status === 'Submitted'">Claim Submitted</div>
+            <div class="status_pending" *ngIf="claimantSubmissionDateTimeUTC === 'null'">Claim Submitted</div>
+          </div>
+          <div class="col">
+            <div class="claim_nonactive" style="padding-right: 29px;" *ngIf="status !== 'WithBroker'">With Broker</div>
+            <div class="claim_active" style="padding-right: 29px;" *ngIf="status === 'WithBroker'">With Broker</div>
+          </div>
+          <div class="col">
+            <div class="claim_active" style="padding-right: 67px;" *ngIf="status === 'WithCarrier'">With Carrier</div>
+            <div class="claim_nonactive" style="padding-right: 67px;" *ngIf="status !== 'WithCarrier'">With Carrier</div>
+          </div>
+          <div class="col">
+            <div class="claim_nonactive" style="padding-right: 107px;" *ngIf="status !== 'Approved'">Approved</div>
+            <div class="claim_active" style="padding-right: 107px;" *ngIf="status === 'Approved'">Approved</div>
+          </div>
+        </div>
+        <div id="claimStatus" class="row icon_position">
+            <div class="col">
+                <div class="dateOfLoss"></div>
+              </div>
+            <div class="col">
+                <div class="claimSubmitted" *ngIf="status === 'Submitted'"></div>
+                <div class="claimSubmitted_past" *ngIf="status !== 'Submitted'"></div>
+            </div>
+            <div class="col">
+              <div class="WithBroker"  *ngIf="newStatus === 'WithBroker'"></div>
+                <div class="pendingStage" *ngIf="newStatus === 'Submitted' && !BrokerFirstViewDateTimeUTC "></div>
+                <div class="WithBroker_past" *ngIf="newStatus !== 'WithBroker' && (BrokerFirstAssignmentToCarrierDateTimeUTC || BrokerFirstViewDateTimeUTC)"></div>
+            </div>
+            <div class="col">
+                <div class="withInsurer" *ngIf="newStatus === 'WithCarrier'"></div>
+                <div class="pendingStage" *ngIf="newStatus !== 'WithCarrier' && !BrokerFirstAssignmentToCarrierDateTimeUTC "></div>
+                <div class="withInsurer_past" *ngIf="newStatus !== 'WithCarrier' && BrokerFirstAssignmentToCarrierDateTimeUTC "></div> 
+            </div>
+            <div class="col">
+                <div class="approved" *ngIf="newStatus === 'Approved'"></div> 
+                <div class="pendingStage" *ngIf="newStatus !== 'Approved'"></div>
+            </div>
+          </div>
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="row" style="width: 96%;margin-left: 4px;">
+        <div class="col claimDates" *ngIf="DateOfLossFrom">
+          <div>
+              {{DateOfLossFrom  | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
+        <div class="col claimDates" *ngIf="claimantSubmissionDateTimeUTC">
+          <div>
+              {{ claimantSubmissionDateTimeUTC  | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
+        <div class="col claimDates" >
+            <div *ngIf="BrokerFirstViewDateTimeUTC" style="padding-left: 27px;">
+                {{BrokerFirstViewDateTimeUTC | date:'dd/MM/yyyy'}}
+            </div>
+        </div>
+        <div class="col claimDates">
+            <div *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC" style="padding-left: 27px;">
+                {{BrokerFirstAssignmentToCarrierDateTimeUTC  | date:'dd/MM/yyyy' }}
+            </div>
+        </div>
+        <div class="col claimDates">
+            <div *ngIf="CarrierApprovalDateTimeUTC">
+                {{CarrierApprovalDateTimeUTC | date:'dd/MM/yyyy'}}
+            </div>
+        </div>
+    </div>
+  </div>
+    <div class="row">
+      <div class="col"><h3>Broking Details</h3></div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col">
+          <div class="form-label-group">
+            <input  type="text"
+                    id="ClassOfBusiness"
+                    class="form-control"
+                    readonly="readonly"
+                    value="Property"
+                    placeholder="Property" />
+            <label for="ClassOfBusiness">Class of Business (COB)</label>
+          </div>
+      </div>
+
+      <div class="col-sm-1 gutter"></div>
+
+      <div class="form-group col">
+        <div class="form-label-group">
+          <input  type="text"
+                  id="BrokerName"
+                  class="form-control"
+                  readonly="readonly"
+                  value="City Broking Ltd"
+                  placeholder="City Broking Ltd" />
+          <label for="BrokerName">Broker Name</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col"><h3>Insured Details</h3></div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input type="text"
+                      id="insuredName"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{insuredName}}
+                      placeholder="Insured Name"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="This is generally the Name of the Company or Individual that the Insurance Policy belongs To" />
+                <label for="insuredName">Insured Name</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="insuredContactName"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{insuredContactName}}
+                      placeholder="Insured Contact Name" />
+              <label for="insuredContactName">Insured Contact Name</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="insuredTelephoneNumber"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{insuredTelephoneNumber}}
+                      placeholder="Insured Telephone Number" />
+              <label for="insuredTelephoneNumber">Insured Telephone Number</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="insuredEmailAddress"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{insuredEmailAddress}} 
+                      placeholder="Insured Email Address" />
+              <label for="insuredEmailAddress">Insured Email Address</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-1 gutter"></div>
+
+      <div class="col">
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="insuredAddressLine1"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{insuredAddressLine1}}
+                      placeholder="Insured Address Line 1" />
+              <label for="insuredAddressLine1">Insured Address Line 1</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="insuredAddressLine2"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{insuredAddressLine2}}
+                      placeholder="Insured Address Line 2" />
+              <label for="insuredAddressLine2">Insured Address Line 2</label>                
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="insuredAddressCounty"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{insuredAddressCounty}}
+                      placeholder="Insured Address County" />
+              <label for="insuredAddressCounty">Insured Address County</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="insuredAddressPostcode"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{insuredAddressPostcode}}
+                      placeholder="Insured Address Post Code" />
+              <label for="insuredAddressPostcode">Insured Address Post Code</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col"><h3>Claimant Details</h3></div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="form-group col">
+              <div class="form-label-group">
+                <input  type="text"
+                        id="claimantName"
+                        class="form-control"
+                        readonly="readonly"
+                        value={{claimantName}}
+                        placeholder="Claimant Name" />
+                <label for="claimantName">Claimant Name</label>
+              </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="claimantTelephoneNumber"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{claimantTelephoneNumber}}
+                      placeholder="Claimant Telephone Number" />
+              <label for="claimantTelephoneNumber">Claimant Telephone Number</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="claimantEmailAddress"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{claimantEmailAddress}}
+                      placeholder="Claimant Email Address" />
+              <label for="claimantEmailAddress">Claimant Email Address</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-1 gutter"></div>
+
+      <div class="col">
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="claimantAddressLine1"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{claimantAddressLine1}}
+                      placeholder="Claimant Address Line 1" />
+              <label for="claimantAddressLine1">Claimant Address Line 1</label>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="claimantAddressLine2"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{claimantAddressLine2}}
+                      placeholder="Claimant Address Line 2" />
+              <label for="claimantAddressLine2">Claimant Address Line 2</label>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="claimantAddressCounty"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{claimantAddressCounty}}
+                      placeholder="Claimant Address County" />
+              <label for="claimantAddressCounty">Claimant Address County</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                id="claimantAddressPostcode"
+                class="form-control"
+                readonly="readonly"
+                value={{claimantAddressPostcode}}
+                placeholder="Claimant Address Post Code" />
+              <label for="claimantAddressPostcode">Claimant Address Post Code</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col"><h3>Policy Details</h3></div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="policyNumber"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{policyNumber}}
+                      placeholder="Policy Number"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Completing the Policy Number as it appears on the Policy documentation will enable us to locate the details of the risk quickly and ultimately provide a faster service to yourself" />
+              <label for="policyNumber">Policy Number</label>
+            </div>
+          </div>
+
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="policyInceptionDateAndTimeUTC"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{policyInceptionDateAndTimeUTC}}
+                      placeholder="Policy Inception Date" />
+              <label for="policyInceptionDateAndTimeUTC">Policy Inception Date</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-1 gutter"></div>
+
+      <div class="col">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="policyDueDateAndTimeUTC"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{policyDueDateAndTimeUTC}}
+                      placeholder="Policy Due Date"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="This is the date that the Policy relating to this Claim becomes due for renewal" />
+              <label for="policyDueDateAndTimeUTC">Policy Due Date</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Loss Details</h3>
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="dateAndTimeOfLossFromUTC"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{dateAndTimeOfLossFromUTC}}
+                      placeholder="Date Of Loss From" />
+              <label for="dateAndTimeOfLossFromUTC">Date Of Loss From</label>
+            </div>
+          </div>
+
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="dateAndTimeOfLossToUTC"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{dateAndTimeOfLossToUTC}}
+                      placeholder="Date Of Loss To" />
+              <label for="dateAndTimeOfLossToUTC">Date Of Loss To</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <div class="form-label-group">
+              <input  type="text"
+                      id="dateAndTimeLossFirstReportedUTC"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{dateAndTimeLossFirstReportedUTC}}
+                      placeholder="Date Loss First Reported" />
+              <label for="dateAndTimeLossFirstReportedUTC">Date Loss First Reported</label>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+              <div class="form-label-group">
+                <input  type="text"
+                        id="countryOfLoss"
+                        class="form-control"
+                        readonly="readonly"
+                        value={{countryOfLoss}}
+                        placeholder="Country Of Loss" />
+                <label for="countryOfLoss">Country Of Loss</label>
+              </div>
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="input-group col-md-6">
+            <div class="input-group-prepend">
+              <span class="input-group-text poundSign">£</span>
+            </div>
+            <div class="form-label-group">
+              <input  type="number"
+                      id="amountOfClaimGBP"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{amountOfClaimGBP}}
+                      placeholder="Amount Of Claim" />
+              <label for="countryOamountOfClaimGBPLoss">Amount Of Claim</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-1 gutter"></div>
+
+      <div class="col">
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text" 
+                      id="lossLocationAddressLine1"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{lossLocationAddressLine1}}
+                      placeholder="Loss Address Line 1" />
+              <label for="lossLocationAddressLine1">Loss Address Line 1</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text" 
+                      id="lossLocationAddressLine2"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{lossLocationAddressLine2}}
+                      placeholder="Loss Address Line 2" />
+              <label for="lossLocationAddressLine2">Loss Address Line 2</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text" 
+                      id="lossLocationAddressCounty"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{lossLocationAddressCounty}}
+                      placeholder="Loss Address County" />
+              <label for="lossLocationAddressCounty">Loss Address County</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <div class="form-label-group">
+              <input  type="text" 
+                      id="lossLocationAddressPostcode"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{lossLocationAddressPostcode}}
+                      placeholder="Loss Address Post Code" />
+              <label for="lossLocationAddressPostcode">Loss Address Post Code</label>
+            </div>
+          </div>
+
+          <div class="form-group col">
+            <img id="what3Words"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="Clicking this icon after entering the Loss Details Postcode will display a map of the loss area which will allow you to pinpoint the location of the loss more accurately returning a unique 3 word combination representing the location"
+                 src="../assets/img/what3words.png"
+                 disabled="disabled"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="form-label-group">
+        <textarea id="lossDescription"
+                  class="form-control"
+                  required
+                  rows="8"
+                  value={{lossDescription}}
+                  placeholder="Please enter as much information about the loss so that it can be assessed accurately"
+                  [(ngModel)]="lossDescription"
+                  #lossDescriptionModel="ngModel"
+                  name="lossDescriptionModel" ngModel
+                  (change)="sendEvent(lossDescriptionModel)">
+        </textarea>
+        <div class="alert alert-danger" *ngIf="!lossDescriptionModel.value && lossDescriptionModel.touched && !lossDescriptionModel.valid">Loss Description is required</div>
+        <label id="lossDescriptionLabel" for="lossDescription">Loss Description</label>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="commentsHeading">Comments</h3>
+  <div class="row">
+    <div class="col">
+      <div class="form-label-group">
+        <textarea id="narrative"
+                  class="form-control"
+                  readonly="readonly"
+                  rows="8"
+                  value={{narrative}}
+                  placeholder="Narrative"
+                  [(ngModel)]="narrative"
+                  name="narrative">
+        </textarea>
+        <label for="narrative">Narrative</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="form-label-group">
+        <textarea id="claimantComments"
+                  class="form-control"
+                  required
+                  rows="8"
+                  value={{claimantComments}}
+                  placeholder="Add comments"
+                  [(ngModel)]="claimantComments"
+                  #claimantCommentsModel="ngModel"
+                  name="claimantCommentsModel" ngModel>
+        </textarea>
+        <div class="alert alert-danger" *ngIf="claimantCommentsModel.touched && !claimantCommentsModel.valid">Claimant comments are required</div>
+        <label for="claimantComments">Add comments</label>
+      </div>
+    </div>
+  </div>
+
+  <div id="attachAdditionalInfo" href="#">Attach supplementary information</div>
+
+  <div class="row">
+    <div class="col text-center">
+        <a routerLink="/claimant-dashboard">
+          <button id="BackToDashboard" class="btn btn-light btn-round btn-lrg">BACK TO DASHBOARD</button>
+        </a>
+      <button type="submit"
+              id="submit" 
+              class="btn btn-primary btn-round btn-success btn-lrg"
+              [disabled]="isSubmitDisabled(claimForm)"
+              data-toggle="modal"
+              data-target="#submitDialog">UPDATE CLAIM
+      </button>
+      <!-- Modal -->
+      <div class="modal fade" id="submitDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+                <div class="row dates_row">
+                    <div class="col justify-content-center">
+                      <div class="progress_dates" *ngIf="claimantSubmissionDateTimeUTC" style="padding-right: 2px;">{{daysNumbers()}} days</div>
+                  </div>
+                  <div class="col justify-content-center">
+                      <div class="progress_dates" *ngIf="BrokerFirstViewDateTimeUTC"  style="margin-left: 87px;">
+                        {{daysNumbersBroker()}} days
+                      </div>
+                  </div>
+                      <div class="col justify-content-center">
+                          <div class="progress_dates" style="margin-left: 86px;"  *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC">
+                            {{daysNumbersCarrier()}} days
+                          </div>
+                      </div>
+                      <div class="col justify-content-center">
+                          <div class="progress_dates" style="margin-left: 62px;" *ngIf="CarrierApprovalDateTimeUTC">{{daysNumbersApproved()}} days</div>
+                      </div>
+                      <div class="col"></div>
+                    </div>
+              <div class="row status_row">
+                <div class="col">
+                  <div class="claim_nonactive" style="padding-right: 36px;">Date of Loss</div>
+                </div>
+                <div class="col">
+                  <div class="claim_nonactive" *ngIf="status !== 'Submitted'">Submitted</div>
+                  <div class="claim_active" *ngIf="status === 'Submitted'">Submitted</div>
+                </div>
+                <div class="col">
+                  <div class="claim_active" *ngIf="status === 'WithBroker'">With Broker</div>
+                  <div class="claim_nonactive" *ngIf="status !== 'WithBroker'">With Broker</div>
+                </div>
+                <div class="col">
+                  <div class="claim_active" *ngIf="status === 'WithCarrier'">With Carrier</div>
+                  <div class="claim_nonactive" *ngIf="status !== 'WithCarrier'">With Carrier</div>
+                </div>
+                <div class="col">
+                  <div class="claim_nonactive" style="padding-right: 9px;" *ngIf="status !== 'Approved'">Approved</div>
+                  <div class="claim_active" style="padding-right: 9px;" *ngIf="status === 'Approved'">Approved</div>
+                </div>
+              </div>
+              <div id="claimStatus" class="row icon_position">
+                  <div class="col">
+                      <div class="dateOfLoss"></div>
+                    </div>
+                  <div class="col">
+                      <div class="claimSubmitted" *ngIf="status === 'Submitted'"></div>
+                      <div class="claimSubmitted_past" *ngIf="status !== 'Submitted'"></div>
+                  </div>
+                  <div class="col">
+                    <div class="WithBroker"  *ngIf="status === 'WithBroker'"></div>
+                      <div class="pendingStage" *ngIf="status !== 'WithBroker' && !BrokerFirstViewDateTimeUTC"></div>
+                      <div class="WithBroker_past" *ngIf="status !== 'WithBroker' && BrokerFirstViewDateTimeUTC"></div>
+                  </div>
+                  <div class="col">
+                      <div class="withInsurer" *ngIf="status === 'WithCarrier'"></div>
+                      <div class="pendingStage" *ngIf="status !== 'WithCarrier' && !BrokerFirstAssignmentToCarrierDateTimeUTC "></div>
+                      <div class="withInsurer_past" *ngIf="status !== 'WithCarrier' && BrokerFirstAssignmentToCarrierDateTimeUTC "></div> 
+                  </div>
+                  <div class="col">
+                      <div class="approved" *ngIf="status === 'Approved' "></div> 
+                      <div class="pendingStage" *ngIf="status !== 'Approved'"></div>
+                  </div>
+                </div>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col claimDates">
+                      <div style="padding-right: 30px;">
+                          {{DateOfLossFrom  | date:'dd/MM/yyyy' }}
+                      </div>
+                    </div>
+                    <div class="col claimDates">
+                      <div>
+                          {{ claimantSubmissionDateTimeUTC  | date:'dd/MM/yyyy' }}
+                      </div>
+                    </div>
+                    <div class="col claimDates" >
+                        <div *ngIf="BrokerFirstViewDateTimeUTC" style="padding-left: 29px;">
+                            {{BrokerFirstViewDateTimeUTC | date:'dd/MM/yyyy'}}
+                        </div>
+                    </div>
+                    <div class="col claimDates">
+                        <div *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC" style="padding-left: 30px;">
+                            {{BrokerFirstAssignmentToCarrierDateTimeUTC  | date:'dd/MM/yyyy' }}
+                        </div>
+                    </div>
+                    <div class="col claimDates" style="padding-right: 34px;">
+                        <div *ngIf="CarrierApprovalDateTimeUTC">
+                            {{CarrierApprovalDateTimeUTC | date:'dd/MM/yyyy'}}
+                        </div>
+                    </div>
+                </div>
+              <div *ngIf="responseStatus == 200">
+                <h1 class="confirmation_title" style="color: #4470C5;">Claim Updated</h1>
+                <p><b>UCSR ref: {{ claim.uniqueClaimsSubmissionReference }}</b></p>
+                <p>Claim Updated</p>
+                    <div class="row justify-content-center">
+                        <a routerLink="../claimant-dashboard"><button class="btn-text btn btn-primary btn-round btn-success btn-lrg" data-dismiss="modal">GO TO MY DASHBOARD</button></a>
+                    </div>
+               
+              </div>
+            </div>
+            <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-primary btn-round btn-success" data-dismiss="modal">Close</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+</form>

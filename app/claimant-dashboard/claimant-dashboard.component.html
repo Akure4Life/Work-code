@@ -1,0 +1,60 @@
+<nav class="navbar-custom">
+  <div class="container">
+      <div class="row align-items-center">
+        <div id="lmca" class="col-md offset-md">LMCA</div>
+        <div class="col-md offset-md-8"><a routerLink="/" class="heading">HOME</a></div>
+        <div class="col-md"><a class="heading">LOGOUT</a></div>
+      </div>
+      <div class="row">
+        <div class="col justify-content-center claimDashboardHeader">
+          <h1 id="dashboard_title">Claimant Dashboard</h1>
+        </div>
+        <div class="row justify-content-center lodgeAClaim">
+            <a routerLink="/claims-form"><button class="btn-text btn btn-primary btn-round btn-success btn-lrg">LODGE A CLAIM</button></a>
+         </div>
+      </div>
+      <div class="row">
+        <div class="col justify-content-center">
+          <h2 id="actor">Claims Summary</h2>
+        </div>
+      </div>
+  
+      <form #results="ngForm" (ngSubmit)="filterResults(results.value)">
+        <div class="row">
+          <table class="table">
+              <thead>
+                <tr *ngIf="!isEmptyObject(claims)">
+                  <th scope="col">UCSR</th>
+                  <th scope="col">Insured Name</th>
+                  <th scope="col">Date of Submission</th>
+                  <th scope="col">Date of Loss</th>
+                  <th scope="col">Policy Number</th>
+                  <th scope="col">Class Of Business</th>
+                  <th scope="col">Status</th>
+                  <th scope="col"></th>
+                  
+                  
+                </tr>
+              </thead>
+              <tbody>
+                  <ng-container *ngFor="let claim of claims">
+                    <tr *ngIf="claim.InsuredName == 'Durham County Council' ">
+                      <td><a class="dashboradLink" [routerLink]="['/claimant-view']" [queryParams]="{id: claim.Id}">{{ claim.UniqueClaimsSubmissionReference }}</a></td>
+                      <td>{{ claim.InsuredName }}</td>
+                      <td>{{ claim.ClaimantSubmissionDateTimeUTC | date:'dd/MM/yyyy' }}</td>
+                      <td>{{ claim.DateAndTimeOfLossFromUTC | date:'dd/MM/yyyy' }}</td>
+                      <td>{{ claim.PolicyNumber }}</td>
+                      <td>{{ claim.ClassOfBusiness }}</td>
+                      <td attr.title = "{{ claim.Status }}"  [ngClass]="claim.Status"></td>
+                      <td>{{ claim.Status }}</td>
+                    </tr>
+                    </ng-container>
+                    <tr *ngIf="isEmptyObject(claims)">
+                      <td colspan="10" id="noResults"> No results found <a (click)=" getAllClaims(); results.reset()" >Reload Claims Summary</a></td>
+                    </tr>
+              </tbody>
+            </table>
+        </div>
+      </form>
+    </div>
+  </nav>

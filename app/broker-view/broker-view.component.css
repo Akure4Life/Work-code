@@ -1,0 +1,532 @@
+.navbar-custom {
+    background-color: #333333;
+    height: 85px;
+}
+
+#lmca {
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 24px;
+    color: #FFFFFF;
+    padding: 30px 0px;
+}
+
+#dashboard_title {
+    margin-top: 55px;
+    text-align: center;
+    font-family: Roboto;
+    font-weight: lighter;
+    font-size: 50px;
+    color:#4470C5;
+}
+
+#actor {
+    text-align: center;
+    font-family: Roboto;
+    font-weight: initial;
+    font-size: 28px;
+    color: #333333;
+    margin: 0px;
+    margin-bottom: 30px;
+    padding: 0px;
+}
+
+a.menuItem {
+    font-family: Roboto;
+    font-weight: regular;
+    font-size: 14px;
+    color: #808080;
+}
+
+a.menuItem:active {
+    color: #808080;
+}
+
+a.menuItem:link {
+    color: #CCCCCC;
+}
+
+#claimStatus {
+    margin-top: 0px;
+    margin-left: 38px; 
+}
+
+.progress-bar {
+    color: #6F7700;
+}
+
+h6 {
+    font-family: Roboto;
+    font-size: 21px;
+    font-weight: normal;
+    text-transform: none;
+    color:#4470C5;
+    padding-top: 65px;
+}
+
+.text-toggle[aria-expanded=false] .text-expanded {
+    display: none;
+    padding: 0px;
+}
+
+.text-toggle[aria-expanded=true] .text-collapsed {
+    display: none;
+    padding: 0px;
+}
+
+.text-expanded, .text-collapsed {
+    font-size: 14px;
+    color: #6F7700;
+    text-decoration: underline;
+}
+
+input.form-control {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+input:read-only {
+    background-color: #F8F8F8;
+    border: none;
+    text-decoration: none;
+    /*border-bottom: 1px dashed #CCCCCC;*/
+}
+
+.form-control:focus {
+    border-color: #6F7700;
+}
+
+textarea.form-control {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+label {
+    font-size: 13px;
+    margin-top: 25px;
+}
+
+.form-check-label {
+    margin-top: -20px;
+}
+
+#SCAPToggle {
+    margin-top: 0px !important;
+    font-weight: bold;
+}
+
+#confirmation_title {
+    margin-top: 55px;
+    text-align: center;
+    font-family: Roboto;
+    font-weight: lighter;
+    font-size: 50px;
+    color:#4470C5;
+}
+
+.WithBroker {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -162px;
+    background-position-y: 64px;
+    width: 97px;
+    height: 51px;
+}
+
+.WithBroker_past {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -162px;
+    background-position-y: 7px;
+    width: 97px;
+    height: 51px;
+}
+
+#save .WithBroker_past,
+#submit .WithBroker_past {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -172px;
+    background-position-y: 7px;
+    width: 99px;
+    height: 51px;
+}
+
+.withInsurer {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -253px;
+    background-position-y: 64px;
+    width: 99px;
+    height: 51px;
+}
+
+.withInsurer_past {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -253px;
+    background-position-y: 7px;
+    width: 99px;
+    height: 51px;
+}
+
+#save .withInsurer_past,
+#submit .withInsurer_past {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -263px;
+    background-position-y: 7px;
+    width: 99px;
+    height: 51px;
+}
+
+
+.approved {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -352px;
+    background-position-y: 64px;
+    width: 102px;
+    height: 51px;
+}
+
+#save .approved,
+#submit .approved {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -391px;
+    background-position-y: 64px;
+    width: 61px;
+    height: 51px;
+}
+
+#save .WithBroker,
+#submit .WithBroker {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -169px;
+    background-position-y: 64px;
+    width: 101px;
+    height: 51px;
+}
+
+
+.dateOfLoss {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: 32px;
+    background-position-y: 7px;
+    width: 77px;
+    height: 51px;
+}
+
+#save .dateOfLoss,
+#submit .dateOfLoss {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: 22px;
+    background-position-y: 7px;
+    width: 77px;
+    height: 51px;
+}
+
+.claimSubmitted {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -60px;
+    background-position-y: 64px;
+    width: 86px;
+    height: 51px;
+}
+
+.claimSubmitted_past {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -65px;
+    background-position-y: 7px;
+    width: 86px;
+    height: 51px;
+}
+
+#save .claimSubmitted,
+#submit .claimSubmitted {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -61px;
+    background-position-y: 64px;
+    width: 86px;
+    height: 51px;
+}
+
+#save .claimSubmitted_past,
+#submit .claimSubmitted_past {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -61px;
+    background-position-y: 7px;
+    width: 86px;
+    height: 51px
+}
+
+.pendingStage {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -466px;
+    background-position-y: 7px;
+    width: 106px;
+    height: 51px;
+}
+
+.pendingStage_approved {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -447px;
+    background-position-y: 7px;
+    width: 106px;
+    height: 51px;
+}
+
+#save .pendingStage,
+#submit .pendingStage {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -444px;
+    background-position-y: 7px;
+    width: 106px;
+    height: 51px;
+}
+
+.textPosition {
+    float: right;
+    margin-top: -35px;
+    margin-right: 64px;
+}
+
+.textPositionSubmitted {
+    float: right;
+    margin-top: -35px;
+    margin-right: 24px;
+}
+
+.textPositionPeding {
+    float: right;
+    margin-top: -35px;
+    margin-right: 58px;
+}
+
+.textPositionPedingLast {
+    float: right;
+    margin-top: -35px;
+    margin-right: 74px;
+}
+
+#save .textPosition ,
+#submit .textPosition {
+    float: right;
+    margin-top: -35px;
+    margin-right: -7px;
+}
+
+#save .textPositionSubmitted ,
+#submit .textPositionSubmitted {
+    float: right;
+    margin-top: -35px;
+    margin-right: -8px;
+}
+
+#save .textPositionPeding ,
+#submit .textPositionPeding {
+    float: right;
+    margin-top: -35px;
+    margin-right: -17px;
+}
+
+#save .textPositionPedingLast ,
+#submit .textPositionPedingLast {
+    float: right;
+    margin-top: -35px;
+    margin-right: 3px;
+}
+
+#submit .withInsurer,
+#save .withInsurer {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -264px;
+    background-position-y: 65px;
+    width: 90px;
+    height: 51px;
+}
+
+.btn {
+    background-color: #6F7700 !important;
+}
+
+#submit #brokerViewSave {
+    margin-top: 55px;
+    text-align: center;
+    font-family: Roboto;
+    font-weight: lighter;
+    font-size: 50px;
+    color: #4470C5 !important;
+}
+
+a.heading {
+    font-family: Roboto;
+    font-weight: regular;
+    font-size: 14px;
+    color: #808080;
+}
+
+a.heading:active {
+    color: #808080;
+}
+
+a.heading:link {
+    color: #CCCCCC;
+}
+
+.claimDates {
+    margin-bottom: 10px;
+    margin-top: 0px;
+    color: #808080;
+    font-size: 13px;
+    padding-left: 15px;
+}
+
+#save .claimDates,
+#submit .claimDates {
+    margin-bottom: 10px;
+    margin-top: 0px;
+    color: #808080;
+    font-size: 13px;
+    padding-left: 4px;
+}
+
+
+.status_row {
+    position: relative;
+    top: 30px;
+}
+
+.dates_row {
+    position: relative;
+    top: 88px;
+}
+
+#save .dates_row,
+#submit .dates_row {
+    position: relative;
+    top: 89px;
+}
+
+.progress {
+    margin-left: 90px;
+    width: 80%;
+}
+
+
+.claim_active {
+    color: #6F7700;
+    font-weight: bold;
+    padding-left: 13px;
+}
+
+#save .claim_active,
+#submit .claim_active {
+    color: #6F7700;
+    font-weight: bold;
+    padding-left: 0px;
+}
+
+/* new classes */
+.timeline_container {
+    position: relative;
+    text-align: center;
+}
+
+.dates_row {
+    position: relative;
+    top: 88px;
+    margin-left: 40px;
+}
+
+#save .dates_row,
+#submit .dates_row {
+    position: relative;
+    top: 89px;
+    margin-left: 30px;
+}
+
+.progress_dates {
+    width: 41%;
+    margin-left: 120px;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: #6F7700;
+}
+
+#save .progress_dates,
+#submit .progress_dates {
+    width: 55%;
+    margin-left: 66px;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: #6F7700;
+}
+
+.claim_nonactive {
+    color: #808080;
+    padding-left: 13px;
+}
+
+#save .claim_nonactive,
+#submit .claim_nonactive {
+    color: #808080;
+    padding-left: 21px;
+}
+
+
+
+#save .claim_nonactive,
+#submit .claim_nonactive {
+    color: #808080;
+    padding-left: 0px;
+}
+
+.claim_active {
+    color: #6F7700;
+    font-weight: bold;
+    padding-left: 13px;
+}
+
+#save .claim_active,
+#submit .claim_active {
+    color: #6F7700;
+    font-weight: bold;
+    padding-left: 0px;
+}
+
+.claimDates_active {
+    color: #666666;
+    font-size: 13px;
+}
+
+.icon_position {
+    top: 25px;
+    position: relative;
+}
+
+#save .progress, 
+#submit .progress {
+    margin-left: 51px;
+    width: 84%;
+}
+
+#save #claimStatus, 
+#submit #claimStatus {
+    margin-top: 0px;
+    margin-left: 0px;
+    position: relative;
+    top: 25px;
+}
+
+#save .pendingStage,
+#submit .pendingStage {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -461px;
+    background-position-y: 7px;
+    width: 106px;
+    height: 53px;
+}
+
+
+
+

@@ -1,0 +1,138 @@
+<nav class="navbar-custom">
+  <div class="container">
+      <div class="row align-items-center">
+        <div id="lmca" class="col-md offset-md">LMCA</div>
+        <div class="col-md offset-md-8"><a routerLink="/" class="heading">HOME</a></div>
+        <div class="col-md"><a class="heading">LOGOUT</a></div>
+      </div>
+      <div class="row">
+        <div class="col justify-content-center">
+          <h1 id="dashboard_title">Broker Dashboard</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col justify-content-center">
+          <h2 id="actor">Claims Summary</h2>
+        </div>
+      </div>
+  
+      <form #results="ngForm" (ngSubmit)="filterResults(results.value)">
+          <div class="row" id="filterHeaders">
+              <div class="col-md">
+                <label>Status</label>
+              </div>
+              <div class=" col-md">
+                <label class="cobLabel">Class of Business</label>
+              </div>
+              <div class=" col-md">
+                <label class="fromDateLabel">Date From</label>
+              </div>
+              <div class=" col-md">
+                <label class="toDateLabel">Date To</label>
+              </div>
+              <div class=" col-md"></div>
+          </div>
+        <div id="filters" class="row justify-content-md-center">
+          <div class="form-group col-md">
+            <mat-form-field>
+              <input  type="text"
+                      id="Status"
+                      class="form-control"
+                      aria-label="Number"
+                      matInput [formControl]="statusControl"
+                      [matAutocomplete]="auto"
+                      placeholder="All"
+                      name="Status"/>
+              <mat-autocomplete #auto="matAutocomplete" searchText="example" (optionSelected)="statusSelected($event)">
+                <mat-option *ngFor="let status of statusOptions | async" [value]="status">
+                  {{ status }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="form-group col-md">
+            <mat-form-field>
+                <input  type="text"
+                        id="COB"
+                        class="form-control"
+                        aria-label="Number"
+                        matInput [formControl]="COBControl"
+                        [matAutocomplete]="auto_1"
+                        placeholder="All"
+                        name="COB" />
+                <mat-autocomplete #auto_1="matAutocomplete" searchText="example" (optionSelected)="cobSelected($event)">
+                  <mat-option *ngFor="let cob of cobOptions | async" [value]="cob">
+                    {{ cob }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+          </div>
+          <div class="form-group col-md">
+            <input  type="text"
+                    id="ClaimantSubmissionDateTimeUTCFromInclusive"
+                    class="form-control datetimepicker"
+                    (click)="openDatePicker()"
+                    (blur)="fromDate=datePickerFrom.value"
+                    placeholder="From Date"
+                    name="ClaimantSubmissionDateTimeUTCFromInclusive"
+                    #datePickerFrom
+                    [ngModel]="fromDate" />
+          </div>
+          <div class="form-group col-md">
+            <input  type="text"
+                    id="ClaimantSubmissionDateTimeUTCToExclusive"
+                    class="form-control datetimepicker"
+                    (click)="openDatePicker()"
+                    (blur)="toDate=datePickerTo.value"
+                    placeholder="To Date"
+                    name="ClaimantSubmissionDateTimeUTCToExclusive"
+                    #datePickerTo
+                    [ngModel]="toDate" />
+          </div>
+          <div class="col-md">
+            <button type="submit"
+                    id="searchClaims" 
+                    class="btn btn-primary btn-round btn-success btn-lrg">Filter Results
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <table class="table">
+              <thead>
+                <tr *ngIf="!isEmptyObject(claims)">
+                  <th scope="col">UCSR</th>
+                  <th scope="col">Insured Name</th>
+                  <th scope="col">DOS</th>
+                  <th scope="col">UCR</th>
+                  <th scope="col">Policy Number</th>
+                  <th scope="col">UMR</th>
+                  <th scope="col">COB</th>
+                  <th scope="col">DOL</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">SCAP</th>
+                </tr>
+              </thead>
+              <tbody>
+                    <tr *ngFor="let claim of claims">
+                      <td><a class="dashboradLink" [routerLink]="['/broker-view']" [queryParams]="{id: claim.Id}">{{ claim.UniqueClaimsSubmissionReference }}</a></td>
+                      <td>{{ claim.InsuredName }}</td>
+                      <td>{{ claim.ClaimantSubmissionDateTimeUTC | date:'dd/MM/yyyy' }}</td>
+                      <td>{{ claim.UniqueClaimsReference }}</td>
+                      <td>{{ claim.PolicyNumber }}</td>
+                      <td>{{ claim.UniqueMarketReference }}</td>
+                      <td>{{ claim.ClassOfBusiness }}</td>
+                      <td>{{ claim.DateAndTimeOfLossFromUTC | date:'dd/MM/yyyy' }}</td>
+                      <td attr.title = "{{ claim.Status }}"  [ngClass]="claim.Status"></td>
+                      <td *ngIf="claim.SingleClaimsAgreementPartyIndicator == false"  ngClass="scapIndicator"></td>
+                      <td *ngIf="claim.SingleClaimsAgreementPartyIndicator == true"  ngClass="scapIndicatorTrue"></td>
+                      <td *ngIf="claim.SingleClaimsAgreementPartyIndicator == null" ngClass="scapIndicator"></td>
+                    </tr>
+                    <tr *ngIf="isEmptyObject(claims)">
+                      <td colspan="10" id="noResults"> No results found <a (click)=" getAllClaims(); results.reset()" >Reload Claims Summary</a></td>
+                    </tr>
+              </tbody>
+            </table>
+        </div>
+      </form>
+    </div>
+  </nav>

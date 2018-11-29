@@ -1,0 +1,991 @@
+<nav class="navbar-custom">
+  <div class="container">
+    <div class="row align-items-center">
+      <div id="lmca" class="col-md offset-md">LMCA</div>
+      <div class="col-md offset-md-8"><a routerLink="/" class="heading">HOME</a></div>
+      <div class="col-md"><a class="menuItem">LOGOUT</a></div>
+    </div>
+    <div class="row">
+      <div class="col justify-content-center">
+        <h1 id="dashboard_title">Lodge A Claim (Carrier View)</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col justify-content-center">
+        <h2 id="actor">Property Claim</h2>
+      </div>
+    </div>
+    <div class="timeline_container">
+    <div class="row dates_row">
+      <div class="col justify-content-center">
+          <div class="progress_dates" *ngIf="claimantSubmissionDateTimeUTC">
+            {{daysNumbers()}} days
+          </div>
+      </div>
+      <div class="col justify-content-center">
+          <div class="progress_dates" *ngIf="BrokerFirstViewDateTimeUTC">
+            {{daysNumbersBroker()}} days
+          </div>
+      </div>
+      <div class="col justify-content-center">
+          <div class="progress_dates" style="margin-left: 138px;"  *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC">
+            {{daysNumbersCarrier()}} days
+          </div>
+      </div>
+      <div class="col justify-content-center">
+          <div class="progress_dates" style="margin-left: 149px;" *ngIf="CarrierApprovalDateTimeUTC">{{daysNumbersApproved()}} days</div>
+      </div>
+      <div class="col"></div>
+    </div>
+    <div class="row status_row">
+        <div class="col">
+          <div class="claim_nonactive">Date of Loss</div>
+        </div>
+        <div class="col">
+          <div class="claim_nonactive" *ngIf="newStatus !== 'Submitted'">Claim Submitted</div>
+          <div class="claim_active" *ngIf="newStatus === 'Submitted'">Claim Submitted</div>
+          <div class="newStatus_pending" *ngIf="claimantSubmissionDateTimeUTC === 'null'">Claim Submitted</div>
+        </div>
+        <div class="col">
+          <div class="claim_nonactive" style="padding-right: 29px;" *ngIf="newStatus !== 'WithBroker'">With Broker</div>
+          <div class="claim_active" style="padding-right: 29px;" *ngIf="newStatus === 'WithBroker'">With Broker</div>
+        </div>
+        <div class="col">
+          <div class="claim_active" style="padding-right: 33px;" *ngIf="newStatus === 'WithCarrier'">With Carrier</div>
+          <div class="claim_nonactive" style="padding-right: 33px;" *ngIf="newStatus !== 'WithCarrier'">With Carrier</div>
+        </div>
+        <div class="col">
+          <div class="status_pending" style="padding-right: 36px;" *ngIf="!CarrierApprovalDateTimeUTC">Approved</div>
+          <div class="claim_active" style="padding-right: 36px;" *ngIf="newStatus === 'Approved'">Approved</div>
+        </div>
+      </div>
+      <div id="claimStatus" class="row icon_position">
+          <div class="col">
+              <div class="dateOfLoss"></div>
+            </div>
+          <div class="col">
+              <div class="claimSubmitted" *ngIf="newStatus === 'Submitted'"></div>
+              <div class="claimSubmitted_past" *ngIf="newStatus !== 'Submitted'"></div>
+          </div>
+          <div class="col">
+            <div class="WithBroker"  *ngIf="newStatus === 'WithBroker'"></div>
+              <div class="pendingStage" *ngIf="newStatus !== 'WithBroker' && !BrokerFirstViewDateTimeUTC"></div>
+              <div class="WithBroker_past" *ngIf="newStatus !== 'WithBroker' && BrokerFirstViewDateTimeUTC"></div>
+          </div>
+          <div class="col">
+              <div class="withInsurer" *ngIf="newStatus === 'WithCarrier'"></div>
+              <div class="pendingStage" *ngIf="newStatus !== 'WithCarrier' && !BrokerFirstViewDateTimeUTC "></div>
+              <div class="withInsurer_past" *ngIf="newStatus !== 'WithCarrier' && BrokerFirstAssignmentToCarrierDateTimeUTC "></div> 
+          </div>
+          <div class="col">
+              <div class="approved" *ngIf="newStatus === 'Approved' "></div> 
+              <div class="pendingStage" *ngIf="newStatus !== 'Approved'"></div>
+          </div>
+        </div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <div class="row">
+        <div class="col claimDates">
+          <div>
+              {{DateOfLossFrom  | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
+        <div class="col claimDates">
+          <div style="padding-left: 8px;">
+              {{ claimantSubmissionDateTimeUTC  | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
+        <div class="col claimDates" >
+            <div *ngIf="BrokerFirstViewDateTimeUTC">
+                {{BrokerFirstViewDateTimeUTC | date:'dd/MM/yyyy'}}
+            </div>
+        </div>
+        <div class="col claimDates" style="padding-right: 21px;">
+            <div *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC">
+                {{BrokerFirstAssignmentToCarrierDateTimeUTC  | date:'dd/MM/yyyy' }}
+            </div>
+        </div>
+        <div class="col claimDates" style="padding-right: 34px;">
+            <div *ngIf="CarrierApprovalDateTimeUTC">
+                {{CarrierApprovalDateTimeUTC | date:'dd/MM/yyyy'}}
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+
+  <form #claimForm="ngForm" (ngSubmit)="acceptClaim()">
+      <div class="container">
+        <div class="row">
+          <div class="col"><h6>Broking Details</h6></div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="BrokerID">Broker ID</label>
+            <input  type="text"
+                    id="BrokerID"
+                    class="form-control"
+                    readonly="readonly"
+                    value="B0094"
+                    name="BrokerID" />
+          </div>
+    
+          <div class="form-group col-md-6">
+            <label for="BrokerName">Broker Name</label>
+            <input  type="text"
+                    id="BrokerName"
+                    class="form-control"
+                    readonly="readonly"
+                    value="City Broking Ltd"
+                    name="BrokerName">
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+              <label for="BrokerContact">Broker Contact</label>
+              <input  type="text"
+                      id="BrokerContact"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{BrokerContact}}
+                      [(ngModel)]="BrokerContact"
+                      name="BrokerContact" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="BrokerPhone">Broker Phone</label>
+             <input  type="text"
+                      id="BrokerPhone"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{BrokerPhone}}
+                      [(ngModel)]="BrokerPhone"
+                      name="BrokerPhone" /> 
+            </div>
+          </div>
+
+        <div class="row">
+          <div class="col"><h6>Insured Details</h6></div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="InsuredName">Insured Name (Policy)</label>
+            <input  type="text"
+                    id="InsuredName"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{InsuredName}}
+                    [(ngModel)]="InsuredName"
+                    name="InsuredName" />
+          </div>
+      
+          <div class="form-group col-md-6">
+            <label for="InsuredContact">Insured Contact Name</label>
+            <input  type="text"
+                    id="InsuredContact"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{InsuredContact}}
+                    [(ngModel)]="InsuredContact"
+                    name="InsuredContact" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <div class="collapse InsuredDetailsCollapse">
+              <label for="InsuredTelephone">Insured Telephone Number</label>
+              <input  type="text"
+                id="InsuredTelephone"
+                class="form-control"
+                readonly="readonly"
+                value={{InsuredTelephone}}
+                [(ngModel)]="InsuredTelephone"
+                name="InsuredTelephone" />
+            </div>
+          </div>
+        
+          <div class="form-group col-md-6">
+            <div class="collapse InsuredDetailsCollapse">
+              <label for="InsuredEmail">Insured Email Address</label>
+              <input  type="text"
+                    id="InsuredEmail"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{InsuredEmail}}
+                    [(ngModel)]="InsuredEmail"
+                    name="InsuredEmail" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <a  class="text-toggle" data-toggle="collapse" href=".InsuredDetailsCollapse" aria-expanded="false">
+              <span class="text-collapsed">more details<i class="fa fa-chevron-down"></i></span>
+              <span class="text-expanded">less details<i class="fa fa-chevron-up"></i></span>
+            </a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col"><h6>Policy Details</h6></div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="PolicyNumber">Policy Number</label>
+            <input  type="text"
+                    id="PolicyNumber"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{PolicyNumber}}
+                    [(ngModel)]="PolicyNumber"
+                    name="PolicyNumber" />
+          </div>
+      
+          <div class="form-group col-md-6">
+            <label for="UMR">UMR (Policy)</label>
+            <input  type="text"
+                    id="UMR"
+                    class="form-control"
+                    readonly="readonly"
+                    value="B0941JK1111111"
+                    name="UMR" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-3">
+            <label for="PolicyInceptionDate">Policy Inception Date</label>
+            <input  type="text"
+                    id="PolicyInceptionDate"
+                    class="form-control datetimepicker"
+                    placeholder="Policy Inception Date"
+                    readonly="readonly"
+                    value="06/01/2018" />
+          </div>
+          <div class="form-group col-md-3">
+            <label for="PolicyDueDate">Policy Due Date</label>
+            <input  type="text"
+                    id="PolicyDueDate"
+                    class="form-control datetimepicker"
+                    placeholder="Policy Due Date"
+                    readonly="readonly"
+                    value="05/01/2019" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <div class="collapse PolicyDetailsCollapse">
+              <label for="PolicyPeriodNarrative">Policy Period Narrative</label>
+              <input  type="text"
+                      id="PolicyPeriodNarrative"
+                      class="form-control"
+                      readonly="readonly"
+                      value="TBA"
+                      name="PolicyPeriodNarrative" />
+            </div>
+          </div>
+      
+          <div class="form-group col-md-6">
+            <div class="collapse PolicyDetailsCollapse">
+              <label for="SlipLead">Slip Lead</label>
+              <input  type="text"
+                      id="SlipLead"
+                      class="form-control"
+                      readonly="readonly"
+                      value="First Class Insurance"
+                      name="SlipLead" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <div class="collapse PolicyDetailsCollapse">
+              <label for="Bureau">Bureau</label>
+              <input  type="text"
+                      id="Bureau"
+                      class="form-control"
+                      readonly="readonly"
+                      value="Lloyd's"
+                      name="Bureau" />
+            </div>
+          </div>
+      
+          <div class="form-group col-md-6">
+            <div class="collapse PolicyDetailsCollapse">
+              <label for="BureauLead">Bureau Lead</label>
+              <input  type="text"
+                      id="BureauLead"
+                      class="form-control"
+                      readonly="readonly"
+                      value="First Class Insurance"
+                      name="BureauLead" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <div class="collapse PolicyDetailsCollapse">
+              <label for="CarrierCode">Carrier Code (Lloyd's Syndicate Number)</label>
+              <input  type="text"
+                      id="CarrierCode"
+                      class="form-control"
+                      readonly="readonly"
+                      value="33"
+                      name="CarrierCode" />
+            </div>
+          </div>
+      
+          <div class="form-group col-md-6">
+            <div class="collapse PolicyDetailsCollapse">
+              <label for="CarrierLine">Carrier Line %</label>
+              <input  type="text"
+                      id="CarrierLine"
+                      class="form-control"
+                      readonly="readonly"
+                      value="100"
+                      name="CarrierLine" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <div class="collapse PolicyDetailsCollapse">
+              <label for="SumInsuredAmount">Sum Insured Amount</label>
+              <input  type="text"
+                      id="SumInsuredAmount"
+                      class="form-control"
+                      readonly="readonly"
+                      value="50,000"
+                      name="SumInsuredAmount" />
+            </div>
+          </div>
+      
+          <div class="form-group col-md-6">
+            <div class="collapse PolicyDetailsCollapse">
+              <label for="SumInsuredCurrency">Sum Insured Currency</label>
+              <input  type="text"
+                      id="SumInsuredCurrency"
+                      class="form-control"
+                      readonly="readonly"
+                      value="GBP"
+                      name="SumInsuredCurrency" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <div class="collapse PolicyDetailsCollapse">
+              <label for="ExcessAmount">Excess Amount</label>
+              <input  type="text"
+                      id="ExcessAmount"
+                      class="form-control"
+                      readonly="readonly"
+                      value="3,000"
+                      name="ExcessAmount" />
+            </div>
+          </div>
+      
+          <div class="form-group col-md-6">
+            <div class="collapse PolicyDetailsCollapse">
+              <label for="ExcessAmountCurrency">Excess Amount Currency</label>
+              <input  type="text"
+                      id="ExcessAmountCurrency"
+                      class="form-control"
+                      readonly="readonly"
+                      value="GBP"
+                      name="ExcessAmountCurrency" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+              <a  class="text-toggle" data-toggle="collapse" href=".PolicyDetailsCollapse" aria-expanded="false">
+                <span class="text-collapsed">more details<i class="fa fa-chevron-down"></i></span>
+                <span class="text-expanded">less details<i class="fa fa-chevron-up"></i></span>
+              </a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col"><h6>Loss Details</h6></div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-3">
+              <label for="SCAPIndicator">SCAP Indicator</label>
+              <div class="togglebutton">
+                <label id="SCAPToggle">Off
+                  <input  id="SCAPIndicator"
+                          type="checkbox"
+                          [(ngModel)]="SCAPIndicator"
+                          name="SCAPIndicator"
+                          [disabled]="true"
+                          [checked]="SCAPIndicator"
+                          (change)="scapSelected($event)">
+                  <span class="toggle"></span>
+                  On
+                </label>
+              </div>
+          </div>
+          <div class="form-group col-md-3">
+            <label for="BrokerAdvisedDate">Broker Advised Date</label>
+            <input  type="text"
+                    id="BrokerAdvisedDate"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{BrokerAdvisedDate}}
+                    [(ngModel)]="BrokerAdvisedDate"
+                    name="BrokerAdvisedDate" />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="BrokerAdvisedDate">UCR</label>
+            <input  type="text"
+                    id="UCR"
+                    class="form-control"
+                    readonly="readonly"
+                    value="{{UCR}}"
+                    [(ngModel)]="UCR"
+                    name="UCR" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-3">
+            <label for="DateOfLossFrom">Date of Loss From</label>
+            <input  type="text"
+                    id="DateOfLossFrom"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{DateOfLossFrom}}
+                    [(ngModel)]="DateOfLossFrom"
+                    name="DateOfLossFrom" />
+          </div>
+          <div class="form-group col-md-3">
+            <label for="DateOfLossTo">Date of Loss To</label>
+            <input  type="text"
+                    id="DateOfLossTo"
+                    class="form-control datetimepicker"
+                    readonly="readonly"
+                    value={{DateOfLossTo}}
+                    [(ngModel)]="DateOfLossTo"
+                    name="DateOfLossTo" />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="COB">Class of Business (COB)</label>
+            <input  type="text"
+                    id="COB"
+                    class="form-control"
+                    readonly="readonly"
+                    value="Property"
+                    name="COB" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="InsurerRef">Insurer Ref</label>
+            <input  type="text"
+                    id="InsurerRef"
+                    class="form-control"
+                    required
+                    value={{InsurerRef}}
+                    [(ngModel)]="InsurerRef"
+                    name="InsurerRef"
+                    #InsurerRefModel="ngModel" />
+            <div class="alert alert-danger" *ngIf="InsurerRefModel.touched && !InsurerRefModel.valid">Insurer Ref is required</div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="LossAddress">Street Address</label>
+            <input  type="text"
+                    id="LossAddress"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{LossAddress}}
+                    [(ngModel)]="LossAddress"
+                    name="LossAddress" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="LossName">Loss Name</label>
+            <input  type="text"
+                    id="LossName"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{LossName}}
+                    [(ngModel)]="LossName"
+                    name="LossName" />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="LossTown">Town</label>
+            <input  type="text"
+                    id="LossTown"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{LossTown}}
+                    [(ngModel)]="LossTown"
+                    name="LossTown" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="CountryOfLoss">Country Of Loss</label>
+            <input  type="text"
+                    id="CountryOfLoss"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{CountryOfLoss}}
+                    [(ngModel)]="CountryOfLoss"
+                    name="CountryOfLoss" />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="LossCounty">County</label>
+            <input  type="text"
+                    id="LossCounty"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{LossCounty}}
+                    [(ngModel)]="LossCounty"
+                    name="LossCounty" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="TransactionReference">Transaction Reference</label>
+            <input  type="text"
+                    id="TransactionReference"
+                    class="form-control"
+                    readonly="readonly"
+                    value="123456789"
+                    name="TransactionReference" />
+          </div>
+          <div class="form-group col-md-3">
+            <label for="LossPostcode">Post code</label>
+            <input  type="text"
+                    id="LossPostcode"
+                    class="form-control"
+                    readonly="readonly"
+                    value={{LossPostcode}}
+                    [(ngModel)]="LossPostcode"
+                    name="LossPostcode" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <div class="collapse LossDetailsCollapse">
+              <label for="OriginalCurrency">Original Currency</label>
+              <input  type="text"
+                      id="OriginalCurrency"
+                      class="form-control"
+                      readonly="readonly"
+                      value="GBP"
+                      name="OriginalCurrency" />
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <div class="collapse LossDetailsCollapse">
+              <label for="AmountOutstandingGBP">Amount Outstanding</label>
+              <input  type="number"
+                      id="AmountOutstandingGBP"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{AmountOutstandingGBP}}
+                      [(ngModel)]="AmountOutstandingGBP"
+                      name="AmountOutstandingGBP" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <div class="collapse LossDetailsCollapse">
+              <label for="PreviouslySettledAmount">Previously Settled Amount</label>
+              <input  type="text"
+                      id="PreviouslySettledAmount"
+                      class="form-control"
+                      readonly="readonly"
+                      name="PreviouslySettledAmount" />
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <div class="collapse LossDetailsCollapse">
+              <label for="ClaimAmount">Claim Amount 100%</label>
+              <input  type="text"
+                      id="ClaimAmount"
+                      class="form-control"
+                      readonly="readonly"
+                      value={{ClaimAmount}}
+                      [(ngModel)]="ClaimAmount"
+                      name="ClaimAmount" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="collapse LossDetailsCollapse">
+              <label for="LossDescription">Loss Description</label>
+              <textarea id="LossDescription"
+                        class="form-control"
+                        readonly="readonly"
+                        value={{LossDescription}}
+                        [(ngModel)]="LossDescription"
+                        rows="8"
+                        name="LossDescription" ngModel>
+              </textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <a  class="text-toggle" data-toggle="collapse" href=".LossDetailsCollapse" aria-expanded="false">
+              <span class="text-collapsed">more details<i class="fa fa-chevron-down"></i></span>
+              <span class="text-expanded">less details<i class="fa fa-chevron-up"></i></span>
+            </a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col"><h6>Status Details</h6></div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <mat-form-field>
+              <label for="Status">Assign To</label>
+              <input  type="text"
+                      id="Status"
+                      class="form-control"
+                      aria-label="Number"
+                      matInput [formControl]="myControl"
+                      [matAutocomplete]="auto"
+                      placeholder="{{Status}}"
+                      [(ngModel)]="Status"
+                      name="Status" />
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="assignToSelected($event)">
+                <mat-option *ngFor="let option of options" [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <label for="BrokerComments">Previous Comments</label>
+            <textarea id="BrokerComments"
+                      class="form-control"
+                      rows="8"
+                      style="border:solid 1px black;"
+                      readonly="readonly"
+                      value={{BrokerComments}}
+                      [(ngModel)]="BrokerComments"
+                      name="BrokerComments">
+            </textarea>
+          </div>
+          <div class="col-md-6">
+            <label for="Narrative">Narrative</label>
+            <textarea id="Narrative"
+                      class="form-control"
+                      rows="8"
+                      style="border:solid 1px black;"
+                      [(ngModel)]="Narrative"
+                      name="Narrative">
+            </textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col text-center">
+              <a routerLink="/carrier-dashboard">
+                <button id="BackToDashboard" class="btn btn-primary btn-round btn-success btn-lrg">BACK TO DASHBOARD</button>
+              </a>
+            <button type="button"
+                    id="Save" 
+                    class="btn btn-primary btn-round btn-success btn-lrg"
+                    (click)="saveClaim()"
+                    [disabled]="!claimForm.valid"
+                    data-toggle="modal"
+                    data-target="#save">SAVE
+            </button>
+            <button type="submit"
+                    id="RejectClaim" 
+                    class="btn btn-primary btn-round btn-success btn-lrg"
+                    [disabled]=true>REJECT CLAIM
+            </button>
+            <button type="submit"
+                    id="Submit" 
+                    class="btn btn-primary btn-round btn-success btn-lrg"
+                    [disabled]="!claimForm.valid"
+                    data-toggle="modal"
+                    data-target="#submit">ACCEPT CLAIM
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="save" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-body">
+                      <div class="row dates_row">
+                        <div class="col justify-content-center">
+                          <div class="progress_dates" *ngIf="claimantSubmissionDateTimeUTC">{{daysNumbers()}} days</div>
+                      </div>
+                      <div class="col justify-content-center">
+                          <div class="progress_dates" *ngIf="BrokerFirstViewDateTimeUTC">
+                            {{daysNumbersBroker()}} days
+                          </div>
+                      </div>
+                          <div class="col justify-content-center">
+                              <div class="progress_dates" style="margin-left: 70px;"  *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC">
+                                {{daysNumbersCarrier()}} days
+                              </div>
+                          </div>
+                          <div class="col justify-content-center">
+                              <div class="progress_dates" style="margin-left: 71px;" *ngIf="CarrierApprovalDateTimeUTC">{{daysNumbersApproved()}} days</div>
+                          </div>
+                          <div class="col"></div>
+                        </div>
+                        <div class="row status_row">
+                            <div class="col">
+                              <div class="claim_nonactive">Date of Loss</div>
+                            </div>
+                            <div class="col">
+                              <div class="claim_nonactive" style="padding-left: 18px" *ngIf="newStatus !== 'Submitted'">Submitted</div>
+                              <div class="claim_active" style="padding-left: 18px" *ngIf="newStatus === 'Submitted'">Submitted</div>
+                            </div>
+                            <div class="col">
+                              <div class="claim_nonactive" style="padding-right: 0px;" *ngIf="newStatus !== 'WithBroker'">With Broker</div>
+                              <div class="claim_active" style="padding-right: 0px;" *ngIf="newStatus === 'WithBroker'">With Broker</div>
+                            </div>
+                            <div class="col">
+                              <div class="claim_active" style="padding-right: 13px;" *ngIf="newStatus === 'WithCarrier'">With Carrier</div>
+                              <div class="claim_nonactive" style="padding-right: 13px;;" *ngIf="newStatus !== 'WithCarrier'">With Carrier</div>
+                            </div>
+                            <div class="col">
+                              <div class="newStatus_pending" style="padding-right: 8px;" *ngIf="!CarrierApprovalDateTimeUTC">Approved</div>
+                              <div class="claim_active" style="padding-right: 8px;" *ngIf="newStatus === 'Approved'">Approved</div>
+                            </div>
+                          </div>
+                          <div id="claimStatus" class="row icon_position">
+                              <div class="col">
+                                  <div class="dateOfLoss"></div>
+                                </div>
+                              <div class="col">
+                                  <div class="claimSubmitted" *ngIf="newStatus === 'Submitted'"></div>
+                                  <div class="claimSubmitted_past" *ngIf="newStatus !== 'Submitted'"></div>
+                              </div>
+                              <div class="col">
+                                <div class="WithBroker"  *ngIf="newStatus === 'WithBroker'"></div>
+                                  <div class="pendingStage" *ngIf="newStatus !== 'WithBroker' && !BrokerFirstViewDateTimeUTC"></div>
+                                  <div class="WithBroker_past" *ngIf="newStatus !== 'WithBroker' && BrokerFirstViewDateTimeUTC"></div>
+                              </div>
+                              <div class="col">
+                                  <div class="withInsurer" *ngIf="newStatus === 'WithCarrier'  "></div>
+                                  <div class="pendingStage" *ngIf="newStatus !== 'WithCarrier' && !BrokerFirstAssignmentToCarrierDateTimeUTC "></div>
+                                  <div class="withInsurer_past" *ngIf="newStatus !== 'WithCarrier' && BrokerFirstAssignmentToCarrierDateTimeUTC "></div> 
+                              </div>
+                              <div class="col">
+                                  <div class="approved" *ngIf="newStatus === 'Approved' "></div> 
+                                  <div class="pendingStage" *ngIf="newStatus !== 'Approved'"></div>
+                              </div>
+                            </div>
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col claimDates" style="padding-left: 11px;">
+                              <div>
+                                  {{DateOfLossFrom  | date:'dd/MM/yyyy' }}
+                              </div>
+                            </div>
+                            <div class="col claimDates">
+                              <div style="padding-left: 22px;">
+                                  {{ claimantSubmissionDateTimeUTC  | date:'dd/MM/yyyy' }}
+                              </div>
+                            </div>
+                            <div class="col claimDates" >
+                                <div *ngIf="BrokerFirstViewDateTimeUTC" style="padding-left: 19px;">
+                                    {{BrokerFirstViewDateTimeUTC   | date:'dd/MM/yyyy' }}
+                                </div>
+                            </div>
+                            <div class="col claimDates">
+                                <div *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC">
+                                    {{BrokerFirstAssignmentToCarrierDateTimeUTC  | date:'dd/MM/yyyy' }}
+                                </div>
+                            </div>
+                            <div class="col claimDates">
+                                <div *ngIf="CarrierApprovalDateTimeUTC">
+                                    {{CarrierApprovalDateTimeUTC | date:'dd/MM/yyyy'}}
+                                </div>
+                            </div>
+                        </div>
+                    <div *ngIf="responseStatus == 200">
+                      <h1 class="confirmation_title" style="color: #4470C5;">Claim saved</h1>
+                      <p><b>UCSR ref: {{ claim.uniqueClaimsSubmissionReference }}</b></p>
+                      <p>This claim has been saved</p>
+                      <div class="row justify-content-center">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3">
+                            <button class="btn-text btn btn-primary btn-round btn-success btn-lrg" data-dismiss="modal" style="background-color: lightgrey !important;">Close</button>
+                        </div>
+                        <div class="col-md-3">
+                            <a routerLink="../carrier-dashboard"><button class="btn-text btn btn-primary btn-round btn-success btn-lrg" data-dismiss="modal">GO TO MY DASHBOARD</button></a>
+                        </div>
+                        <div class="col-md-3"></div>
+                          
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="submit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-body">
+                      <div class="row dates_row">
+                        <div class="col justify-content-center">
+                          <div class="progress_dates" *ngIf="claimantSubmissionDateTimeUTC">{{daysNumbers()}} days</div>
+                      </div>
+                      <div class="col justify-content-center">
+                          <div class="progress_dates" *ngIf="BrokerFirstViewDateTimeUTC">
+                            {{daysNumbersBroker()}} days
+                          </div>
+                      </div>
+                          <div class="col justify-content-center">
+                            <div class="progress_dates" style="margin-left: 83px;"  *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC">
+                                {{daysNumbersCarrier()}} days
+                              </div>
+                          </div>
+                          <div class="col justify-content-center">
+                              <div class="progress_dates" style="margin-left: 79px;" *ngIf="CarrierApprovalDateTimeUTC">{{daysNumbersApproved()}} days</div>
+                          </div>
+                          <div class="col"></div>
+                        </div>
+                        <div class="row status_row">
+                            <div class="col">
+                              <div class="claim_nonactive">Date of Loss</div>
+                            </div>
+                            <div class="col">
+                              <div class="claim_nonactive" style="padding-left: 18px" *ngIf="newStatus !== 'Submitted'">Submitted</div>
+                              <div class="claim_active" style="padding-left: 18px" *ngIf="newStatus === 'Submitted'">Submitted</div>
+                              <div class="newStatus_pending" style="padding-left: 18px" *ngIf="claimantSubmissionDateTimeUTC === 'null'">Submitted</div>
+                            </div>
+                            <div class="col">
+                              <div class="claim_nonactive" style="padding-right: 3px;" *ngIf="newStatus !== 'WithBroker'">With Broker</div>
+                              <div class="claim_active" style="padding-right: 3px;" *ngIf="newStatus === 'WithBroker'">With Broker</div>
+                            </div>
+                            <div class="col">
+                                <div class="claim_active" style="padding-right: 13px;" *ngIf="newStatus === 'WithCarrier'">With Carrier</div>
+                                <div class="claim_nonactive" style="padding-right: 13px;;" *ngIf="newStatus !== 'WithCarrier'">With Carrier</div>
+                              </div>
+                            <div class="col">
+                              <div class="newStatus_pending" style="padding-right: 8px;" *ngIf="newStatus !== 'Approved'">Approved</div>
+                              <div class="claim_active" style="padding-right: 8px;" *ngIf="newStatus === 'Approved'">Approved</div>
+                            </div>
+                          </div>
+                          <div id="claimStatus" class="row icon_position">
+                              <div class="col">
+                                  <div class="dateOfLoss"></div>
+                                </div>
+                              <div class="col">
+                                  <div class="claimSubmitted" *ngIf="newStatus === 'Submitted'"></div>
+                                  <div class="claimSubmitted_past" *ngIf="newStatus !== 'Submitted'"></div>
+                              </div>
+                              <div class="col">
+                                <div class="WithBroker"  *ngIf="newStatus === 'WithBroker'"></div>
+                                <div class="pendingStage" *ngIf="newStatus !== 'WithBroker' && !BrokerFirstViewDateTimeUTC"></div>
+                                <div class="WithBroker_past" *ngIf="newStatus !== 'WithBroker' && BrokerFirstViewDateTimeUTC"></div> 
+                              </div>
+                              <div class="col">
+                                  <div class="withInsurer" *ngIf="newStatus === 'WithCarrier'"></div>
+                                  <div class="pendingStage" *ngIf="newStatus !== 'WithCarrier' && !BrokerFirstAssignmentToCarrierDateTimeUTC "></div>
+                                  <div class="withInsurer_past" *ngIf="newStatus !== 'WithCarrier' && BrokerFirstAssignmentToCarrierDateTimeUTC "></div> 
+                              </div>
+                              <div class="col">
+                                  <div class="approved" *ngIf="newStatus === 'Approved' "></div> 
+                                  <div class="pendingStage" *ngIf="newStatus !== 'Approved'"></div>
+                              </div>
+                            </div>
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col claimDates">
+                              <div>
+                                  {{DateOfLossFrom  | date:'dd/MM/yyyy' }}
+                              </div>
+                            </div>
+                            <div class="col claimDates">
+                              <div style="padding-left: 22px;">
+                                  {{ claimantSubmissionDateTimeUTC  | date:'dd/MM/yyyy' }}
+                              </div>
+                            </div>
+                            <div class="col claimDates" >
+                                <div *ngIf="BrokerFirstViewDateTimeUTC" style="padding-left: 19px;">
+                                    {{BrokerFirstViewDateTimeUTC   | date:'dd/MM/yyyy' }}
+                                </div>
+                            </div>
+                            <div class="col claimDates">
+                                <div *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC">
+                                    {{BrokerFirstAssignmentToCarrierDateTimeUTC  | date:'dd/MM/yyyy' }}
+                                </div>
+                            </div>
+                            <div class="col claimDates">
+                                <div *ngIf="CarrierApprovalDateTimeUTC">
+                                    {{CarrierApprovalDateTimeUTC | date:'dd/MM/yyyy'}}
+                                </div>
+                            </div>
+                        </div>
+                    <div *ngIf="responseStatus == 200">
+                      <h1 class="confirmation_title" style="color: #4470C5;">Claim Agreed</h1>
+                      <p><b>UCSR ref: {{ claim.uniqueClaimsSubmissionReference }}</b></p>
+                      <p>Claim Agreed</p>
+                      <div class="row justify-content-center">
+                          <div class="col-md-3"></div>
+                          <div class="col-md-3">
+                              <button class="btn-text btn btn-primary btn-round btn-success btn-lrg" data-dismiss="modal" style="background-color: lightgrey !important;">Close</button>
+                          </div>
+                          <div class="col-md-3">
+                              <a routerLink="../carrier-dashboard"><button class="btn-text btn btn-primary btn-round btn-success btn-lrg" data-dismiss="modal">GO TO MY DASHBOARD</button></a>
+                          </div>
+                          <div class="col-md-3"></div>
+                            
+                        </div>
+                     
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-primary btn-round btn-success" data-dismiss="modal">Close</button> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+</nav>

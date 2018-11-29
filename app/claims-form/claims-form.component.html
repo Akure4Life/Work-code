@@ -1,0 +1,625 @@
+<nav class="navbar-custom">
+        
+  <div class="container">
+    <div class="row align-items-center">
+      <div id="lmca" class="col-md offset-md">LMCA</div>
+      <div class="col-md offset-md-8"><a routerLink="/" class="heading">HOME</a></div>
+      <div class="col-md alignment"><a class="heading">SIGN-UP</a></div>
+    </div>            
+  </div>
+</nav>  
+<form #claimForm="ngForm" (ngSubmit)="submitClaim(claimForm.value); claimForm.reset()">
+<div class="container">
+    <h1 id="claimFormH1" class="text-center">LMCA</h1>
+    <h2 id="claimFormH2" class="text-center">Claim Form</h2>
+    <div class="timeline_container">
+    <div class="row status_row">
+      <div class="col">
+        <div class="claim_nonactive">Date of Loss</div>
+      </div>
+      <div class="col">
+        <div class="claim_nonactive" style="padding-left: 18px;">Submitted</div>
+      </div>
+      <div class="col">
+        <div class="status_pending">With Broker</div>
+      </div>
+      <div class="col">
+        <div class="status_pending">With Carrier</div>
+      </div>
+      <div class="col">
+        <div class="status_pending">Approved</div>
+      </div>
+    </div>
+    <div id="claimStatus" class="row icon_position">
+      <div class="col">
+          <div class="dateOfLoss"></div>
+        </div>
+      <div class="col">
+          <div class="pendingStage"></div>
+      </div>
+      <div class="col">
+          <div class="pendingStage"></div> 
+      </div>
+      <div class="col">
+          <div class="pendingStage"></div> 
+      </div>
+      <div class="col">
+          <div class="pendingStage_approved"></div>  
+      </div>
+    </div>
+    <div class="progress">
+      <div class="progress-bar" role="progressbar"  aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+  </div>
+    <div class="row" style="margin-top: 50px;">
+      <div class="form-group col-md-6">
+        <label for="ClassOfBusiness">Class of Business (COB)</label>
+        <input  type="text"
+                id="ClassOfBusiness"
+                class="form-control"
+                readonly="readonly"
+                value="Property"
+                name="classOfBusiness"
+                ng-init="classOfBusiness='Property'" />
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="BrokerName">Broker Name</label>
+        <input  type="text"
+                id="BrokerName"
+                class="form-control"
+                readonly="readonly"
+                value="City Broking Ltd"
+                name="brokerName" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col"><h3>Insured Details</h3></div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="form-group col requiredFieldWrapper">
+            <input type="text"
+                    id="InsuredName"
+                    class="form-control required"
+                    required
+                    placeholder="Insured Name"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="This is generally the Name of the Company or Individual that the Insurance Policy belongs To"
+                    #InsuredName="ngModel"
+                    name="InsuredName" ngModel />
+            <div class="alert alert-danger" *ngIf="InsuredName.touched && !InsuredName.valid">Insured Name is required</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="InsuredContactName"
+                    class="form-control"
+                    placeholder="Insured Contact Name"
+                    name="InsuredContactName" ngModel />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="InsuredTelephoneNumber"
+                    class="form-control"
+                    placeholder="Insured Telephone Number"
+                    name="InsuredTelephoneNumber" ngModel />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="InsuredEmailAddress"
+                    class="form-control"
+                    placeholder="Insured Email Address"
+                    name="InsuredEmailAddress" ngModel />
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="row">
+          <div class="form-group col requiredFieldWrapper">
+            <input  type="text"
+                    id="InsuredAddressLine1"
+                    class="form-control"
+                    required
+                    placeholder="Insured Address Line 1"
+                    (ngModelChange)="onAddComment($event)"
+                    name="InsuredAddressLine1" 
+                    #InsuredAddressLine1="ngModel"  ngModel />
+            <div class="alert alert-danger" *ngIf="InsuredAddressLine1.touched && !InsuredAddressLine1.valid">Insured Address is required</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="InsuredAddressLine2"
+                    class="form-control"
+                    placeholder="Insured Address Line 2"
+                    #InsuredAddressLine2="ngModel"
+                    name="InsuredAddressLine2" ngModel />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="InsuredAddressCounty"
+                    class="form-control"
+                    placeholder="Insured County"
+                    #InsuredAddressCounty="ngModel"
+                    name="InsuredAddressCounty" ngModel />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="InsuredAddressPostcode"
+                    class="form-control"
+                    placeholder="Insured Postcode"
+                    #InsuredAddressPostcode="ngModel"
+                    name="InsuredAddressPostcode" ngModel />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col"><h3>Claimant Details</h3></div>
+      <div class="col text-right">
+          <div class="form-check disabled">
+            <label class="form-check-label">
+              <input  type="checkbox"
+                      id="sameAsInsuredAddress"
+                      class="form-check-input"
+                      value=""
+                      [disabled]="buttonIsDisabled"
+                      (change)=" copyAddrs($event, claimForm.value)"
+                      name="sameAsInsuredAddress" ngModel />
+              Same as insured address
+              <span class="form-check-sign">
+                <span class="check"></span>
+              </span>
+            </label>
+          </div> 
+        </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="ClaimantName"
+                    class="form-control"
+                    placeholder="Claimant Name"
+                    name="ClaimantName" ngModel />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="ClaimantTelephoneNumber"
+                    class="form-control"
+                    placeholder="Claimant Telephone Number"
+                    name="ClaimantTelephoneNumber" ngModel />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="ClaimantEmailAddress"
+                    class="form-control"
+                    placeholder="Claimant Email Address"
+                    name="ClaimantEmailAddress" ngModel />
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+          <div class="row">
+              <!-- <div class="col text-right">
+                <div class="form-check disabled">
+                  <label class="form-check-label">
+                    <input  type="checkbox"
+                            id="sameAsInsuredAddress"
+                            class="form-check-input"
+                            value=""
+                            [disabled]="buttonIsDisabled"
+                            (change)=" copyAddrs($event, claimForm.value)"
+                            name="sameAsInsuredAddress" ngModel />
+                    Same as insured address
+                    <span class="form-check-sign">
+                      <span class="check"></span>
+                    </span>
+                  </label>
+                </div> 
+              </div>      -->
+            </div>
+        <div class="row">
+          <div class="form-group col">
+            <input    type="text"
+                      id="ClaimantAddressLine1"
+                      class="form-control"
+                      placeholder="Claimant Address Line 1"  
+                      value={{ClaimantAddressLine1}}
+                      [(ngModel)]="ClaimantAddressLine1" 
+                      name="ClaimantAddressLine1" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="ClaimantAddressLine2"
+                    class="form-control"
+                    placeholder="Claimant Address Line 2"
+                    name="ClaimantAddressLine2"  
+                    value={{ClaimantAddressLine2}}
+                    [(ngModel)]="ClaimantAddressLine2" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="ClaimantAddressCounty"
+                    class="form-control"
+                    placeholder="Claimant County"
+                    name="ClaimantAddressCounty"  
+                    value={{ClaimantAddressCounty}}
+                    [(ngModel)]="ClaimantAddressCounty" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="ClaimantAddressPostcode"
+                    class="form-control"
+                    placeholder="Claimant Postcode"
+                    name="ClaimantAddressPostcode" 
+                    value={{ClaimantAddressPostcode}}
+                    [(ngModel)]="ClaimantAddressPostcode" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3"><h3>Policy Details</h3></div>
+      <div class="col-md-3"><h6 id="PolicyInceptionDateLabel">Policy Inception Date</h6></div>
+      <div class="col-md-3"><h6 id="PolicyDueDateLabel">Policy Due Date</h6></div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-3">
+        <input  type="text"
+                id="PolicyNumber"
+                class="form-control"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Completing the Policy Number as it appears on the Policy documentation will enable us to locate the details of the risk quickly and ultimately provide a faster service to yourself"
+                placeholder="Policy Number"
+                name="PolicyNumber" ngModel />
+      </div>
+      <div class="form-group col-md-3">
+        <input  type="text"
+                id="PolicyInceptionDateAndTimeUTC"
+                class="form-control datetimepicker"
+                (click)="openDatePicker()"
+                (blur)="PolicyInceptionDateAndTimeUTC=policyInceptionDatePicker.value"
+                name="PolicyInceptionDateAndTimeUTC"
+                #policyInceptionDatePicker
+                [ngModel]="PolicyInceptionDateAndTimeUTC" />
+      </div>
+      <div class="form-group col-md-3">
+        <input  type="text"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="This is the date that the Policy relating to this Claim becomes due for renewal"
+                id="PolicyDueDateAndTimeUTC"
+                class="form-control datetimepicker"
+                (click)="openDatePicker()"
+                (blur)="PolicyDueDateAndTimeUTC=policyDueDatePicker.value"
+                name="PolicyDueDateAndTimeUTC"
+                #policyDueDatePicker
+                [ngModel]="PolicyDueDateAndTimeUTC" />
+      </div>
+    </div>
+
+    <h3>Loss Details</h3>
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="form-group col requiredFieldWrapper">
+            <h6>Date of Loss From</h6>
+            <input  type="text"
+                    id="DateAndTimeOfLossFromUTC"
+                    class="form-control"
+                    (click)="openDateTimePicker()"
+                    (blur)="DateAndTimeOfLossFromUTC=dateTimeLossFromPicker.value"
+                    placeholder="From"
+                    name="DateAndTimeOfLossFromUTC"
+                    #dateTimeLossFromPicker
+                    ([ngModel])="DateAndTimeOfLossFromUTC" />
+          </div>
+
+          <div class="form-group col">
+            <h6>Date of Loss To</h6>
+            <input  type="text"
+                    id="DateAndTimeOfLossToUTC"
+                    class="form-control datetimepicker"
+                    (click)="openDatePicker()"
+                    (blur)="DateAndTimeOfLossToUTC=dateTimeLossToPicker.value"
+                    placeholder="To"
+                    [value]=formatDate(DateAndTimeOfLossFromUTC)
+                    name="DateAndTimeOfLossToUTC"
+                    #dateTimeLossToPicker
+                    ([ngModel])="DateAndTimeOfLossToUTC" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <input  type="text"
+                    id="DateAndTimeLossFirstReportedUTC"
+                    class="form-control datetimepicker"
+                    (click)="openDatePicker()"
+                    (blur)="DateAndTimeLossFirstReportedUTC=dateTimeLossReportedPicker.value"
+                    placeholder="Date First Reported"
+                    name="DateAndTimeLossFirstReportedUTC"
+                    #dateTimeLossReportedPicker
+                    [ngModel]="DateAndTimeLossFirstReportedUTC" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6 requiredFieldWrapper">
+            <mat-form-field>
+              <input  type="text"
+                      id="CountryOfLoss"
+                      class="form-control"
+                      aria-label="Number"
+                      matInput [formControl]="myControl"
+                      [matAutocomplete]="auto"
+                      placeholder="Country of Loss"
+                      name="CountryOfLoss" ngModel />
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="countrySelected($event)">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <label for="AmountOfClaimGBP">Amount of Claim</label>
+            <span class="amountOfClaimGBP input-group-addon" style="padding-left: 10px;">£</span>
+            <input  type="number"
+                    id="AmountOfClaimGBP"
+                    name="AmountOfClaimGBP" ngModel />
+          </div>
+        </div>
+      </div>
+
+      <div class="col top-margin">
+        <div class="row">
+          <div class="form-group col requiredFieldWrapper">
+            <input type="text" 
+                      id="LossLocationAddressLine1"
+                      class="form-control"
+                      required
+                      placeholder="Loss Location Address Line 1"
+                      #LossLocationAddressLine1="ngModel"
+                      name="LossLocationAddressLine1" ngModel />
+            <div class="alert alert-danger" *ngIf="LossLocationAddressLine1.touched && !LossLocationAddressLine1.valid">Loss Location is required</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="LossLocationAddressLine2"
+                    class="form-control"
+                    placeholder="Loss Location Address Line 2"
+                    #LossLocationAddressLine2="ngModel"
+                    name="LossLocationAddressLine2" ngModel />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="LossLocationAddressCounty"
+                    class="form-control"
+                    placeholder="Loss Location County"
+                    #lossAddress3="ngModel"
+                    name="LossLocationAddressCounty" ngModel />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <input  type="text"
+                    id="LossLocationAddressPostcode"
+                    class="form-control"
+                    placeholder="Loss Location Postcode"
+                    #LossLocationAddressPostcode="ngModel"
+                    name="LossLocationAddressPostcode" ngModel />
+          </div>
+
+          <div class="form-group col">
+            <img id="what3Words"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="Clicking this icon after entering the Loss Details Postcode will display a map of the loss area which will allow you to pinpoint the location of the loss more accurately returning a unique 3 word combination representing the location"
+                 src="../assets/img/what3words.png"
+                 disabled="disabled"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="row">
+    <div class="col requiredFieldWrapperDescription">
+      <label for="LossDescription">Loss Description</label>
+      <textarea id="lossDescription"
+                class="form-control"
+                required
+                #LossDescription="ngModel"
+                rows="8"
+                placeholder="Please enter as much information about the loss so that it can be assessed accurately"
+                name="LossDescription" ngModel>
+      </textarea>
+      <div class="alert alert-danger" *ngIf="LossDescription.touched && !LossDescription.valid">Loss Description is required</div>
+      <br />
+      <a href="#">Attach supplementary information</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col text-center">
+      <div id="wrapper">
+        <div id="overlay" (mouseenter)="submitButtonMessageShow()" (mouseleave)="submitButtonMessageHide()">
+          <button type="submit"
+                id="submitClaim"
+                class="btn btn-primary btn-round btn-success btn-lrg"
+                [disabled]="!claimForm.valid"
+                data-toggle="modal" data-target="#exampleModal">SUBMIT CLAIM
+          </button>
+          <div id="userMessage" data-toggle="popover" title="Please ensure all mandatory fields are filled in: Insured Name, Insured Address Line 1, Loss Location Address Line 1 and Loss Description" data-placement="top"></div>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+                <div class="row dates_row">
+                    <div class="col justify-content-center">
+                      <div class="progress_dates" *ngIf="claimantSubmissionDateTimeUTC">{{daysNumbers()}} days</div>
+                  </div>
+                  <div class="col justify-content-center">
+                      <div class="progress_dates" *ngIf="BrokerFirstViewDateTimeUTC">
+                        {{daysNumbersBroker()}} days
+                      </div>
+                  </div>
+                      <div class="col justify-content-center">
+                          <div class="progress_dates" style="margin-left: 66px;"  *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC">
+                            {{daysNumbersCarrier()}} days
+                          </div>
+                      </div>
+                      <div class="col justify-content-center">
+                          <div class="progress_dates" style="margin-left: 62px;" *ngIf="CarrierApprovalDateTimeUTC">{{daysNumbersApproved()}} days</div>
+                      </div>
+                      <div class="col"></div>
+                    </div>
+                    <div class="row status_row">
+                        <div class="col">
+                          <div class="claim_nonactive">Date of Loss</div>
+                        </div>
+                        <div class="col">
+                          <div class="claim_nonactive" style="padding-left: 18px" *ngIf="newStatus !== 'Submitted'">Submitted</div>
+                          <div class="claim_active" style="padding-left: 18px" *ngIf="newStatus === 'Submitted'">Submitted</div>
+                        </div>
+                        <div class="col">
+                          <div class="claim_nonactive" style="padding-right: 0px;" *ngIf="newStatus !== 'WithBroker'">With Broker</div>
+                          <div class="claim_active" style="padding-right: 0px;" *ngIf="newStatus === 'WithBroker'">With Broker</div>
+                        </div>
+                        <div class="col">
+                          <div class="claim_active" style="padding-right: 13px;" *ngIf="newStatus === 'WithCarrier'">With Carrier</div>
+                          <div class="claim_nonactive" style="padding-right: 13px;;" *ngIf="newStatus !== 'WithCarrier'">With Carrier</div>
+                        </div>
+                        <div class="col">
+                          <div class="newStatus_pending" style="padding-right: 8px;" *ngIf="!CarrierApprovalDateTimeUTC">Approved</div>
+                          <div class="claim_active" style="padding-right: 8px;" *ngIf="newStatus === 'Approved'">Approved</div>
+                        </div>
+                      </div>
+                      <div id="claimStatus" class="row">
+                        <div class="col">
+                          <div class="dateOfLoss"></div>
+                        </div>
+                        <div class="col">
+                          <div class="claimSubmitted"></div>
+                        </div>
+                        <div class="col">
+                          <div class="pendingStage"></div>
+                        </div>
+                        <div class="col">
+                            <div class="pendingStage"></div>
+                        </div>
+                        <div class="col">
+                            <div class="pendingStage"></div>
+                        </div>
+                      </div>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col claimDates">
+                          <div>
+                            {{DateAndTimeOfLossFromUTCPopUp  | date:'dd/MM/yyyy' }}
+                          </div>
+                        </div>
+                        <div class="col claimDates">
+                          <div style="padding-left: 22px;">
+                              {{ claimantSubmissionDateTimeUTC  | date:'dd/MM/yyyy' }}
+                          </div>
+                        </div>
+                        <div class="col claimDates" >
+                            <div *ngIf="BrokerFirstViewDateTimeUTC" style="padding-left: 19px;">
+                                {{BrokerFirstViewDateTimeUTC   | date:'dd/MM/yyyy' }}
+                            </div>
+                        </div>
+                        <div class="col claimDates">
+                            <div *ngIf="BrokerFirstAssignmentToCarrierDateTimeUTC">
+                                {{BrokerFirstAssignmentToCarrierDateTimeUTC  | date:'dd/MM/yyyy' }}
+                            </div>
+                        </div>
+                        <div class="col claimDates">
+                            <div *ngIf="CarrierApprovalDateTimeUTC">
+                                {{CarrierApprovalDateTimeUTC | date:'dd/MM/yyyy'}}
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div *ngIf="myData">
+                    <h1 id="confirmation_title"> Claim {{myData.status}}</h1>
+                    <p><b>Unique Claims Submission Reference: {{myData.uniqueClaimsSubmissionReference}}</b></p>
+                    <P>You will receive an email confirmation that your claim has been submitted. 
+                        You can login to your claims dashboard to check progress of the claim view 
+                        any correspondence from the broker and insurer working on your claim.  </P>
+                      <div class="col-sm">
+                        <div class="row justify-content-center">
+                            <button class="btn  btn-round btn-lrg _ngcontent-c6" disabled="disabled" data-dismiss="modal">AMEND CLAIM</button> <a routerLink="/claimant-dashboard" data-dismiss="modal"><button class="btn btn-primary btn-round btn-success btn-lrg">GO TO MY DASHBOARD</button></a>
+                        </div>
+                  </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-primary btn-round btn-success" data-dismiss="modal">Close</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</form>

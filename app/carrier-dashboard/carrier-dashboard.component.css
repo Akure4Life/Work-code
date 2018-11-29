@@ -1,0 +1,136 @@
+.container {
+    width: 1200px !important;
+}
+
+.navbar-custom {
+    background-color: #333333;
+    height: 85px;
+}
+
+#filters {
+    height: 72px;
+    background-color: #F2F2F2;
+    width: 1140px;
+    margin-bottom: 50px;
+}
+
+#lmca {
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 24px;
+    color: #FFFFFF;
+    padding: 30px 0px;
+}
+
+a.heading {
+    font-family: Roboto;
+    font-weight: regular;
+    font-size: 14px;
+    color: #808080;
+}
+
+a.heading:active {
+    color: #808080;
+}
+
+a.heading:link {
+    color: #CCCCCC;
+}
+
+#dashboard_title {
+    margin-top: 55px;
+    text-align: center;
+    font-family: Roboto;
+    font-weight: lighter;
+    font-size: 50px;
+    color:#4470C5;
+}
+
+#actor {
+    text-align: center;
+    font-family: Roboto;
+    font-weight: initial;
+    font-size: 28px;
+    color: #333333;
+    margin: 0px;
+    margin-bottom: 30px;
+    padding: 0px;
+}
+
+.btn {
+    background-color: #6F7700 !important;
+}
+
+.Submitted {
+    background-image: url(../../assets/img/Status_Sprite_01.png);
+    background-position-x: -90px;
+    background-position-y: 4px;
+}
+
+.WithBroker {
+    background-image: url(../../assets/img/Status_Sprite_01.png);
+    background-position-x: -190px;
+    background-position-y: 4px;
+}
+
+.WithCarrier {
+    background-image: url(../../assets/img/Status_Sprite_01.png);
+    background-position-x: -290px;
+    background-position-y: 4px;
+}
+
+.Approved {
+    background-image: url(../../assets/img/Status_Sprite_01.png);
+    background-position-x: -390px;
+    background-position-y: 4px;
+}
+
+
+.scapIndicator {
+    background-image: url(../../assets/img/scap_indicator.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.scapIndicatorTrue {
+    background-image: url(../../assets/img/scap_indicator_true.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#noResults {
+    padding-top: 30px;
+}
+
+#noResults a {
+    text-decoration: underline;
+}
+
+.dashboradLink {
+    color: #6F7700;
+    font-weight: bold;
+}
+
+#filterHeaders {
+    background-color: #F2F2F2;
+    padding-top: 10px;
+    width: 1140px;
+}
+
+#filterHeaders label {
+    font-size: 11px;
+    color: b#808080;
+}
+
+
+.fromDateLabel {
+    padding-left: 1px;
+}
+
+.toDateLabel {
+    padding-left: 1px;
+}
+
+.cobLabel {
+    padding-left: 1px;
+}

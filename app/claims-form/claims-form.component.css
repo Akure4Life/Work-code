@@ -1,0 +1,447 @@
+body {
+    background: white;
+}
+
+h1 {
+    font-size: 6em;
+    font-weight: bold;
+}
+
+h3, h6 {
+    font-weight: bold;
+}
+
+h1, h2, h3, h6 {
+    color: #6F7700;
+    margin: 0px;
+    padding: 0px;
+}
+
+h3 {
+    padding-top: 30px;
+    padding-bottom: 10px;
+}
+
+div h6#PolicyInceptionDateLabel, div h6#PolicyDueDateLabel {
+    margin-top: 50px;
+}
+
+div.row div.col #SameAsInsuredAddress {
+    margin-top: 50px;
+}
+
+#claimFormH1 {
+    padding-top: 55px;
+    text-align: center;
+    font-family: Roboto;
+    font-weight: lighter;
+    font-size: 50px;
+    color: #4470C5;
+}
+
+
+
+
+#claimFormH2 {
+    text-align: center;
+    font-family: Roboto;
+    font-weight: initial;
+    font-size: 28px;
+    color: #333333;
+    margin: 0px;
+    margin-bottom: 30px;
+    padding: 0px;
+}
+
+textarea.form-control {
+    border: 1px solid #d2d2d2;
+}
+
+
+#amountOfClaim {
+    font-size: 1.5em;
+    border: none;
+    background-color: rgb(239, 248, 107);
+}
+
+button.btn-default {
+    background-color: #6F7700;
+}
+
+.progress-bar {
+    color: #6F7700;
+}
+
+#submitClaim {
+    margin-bottom: 80px;
+}
+
+a, a:visited {
+    color: red !important;
+}
+
+a:hover, a:active {
+    color: blue !important;
+}
+
+.form-check {
+    margin-top: 47px;
+}
+
+.top-margin {
+    margin-top: 18px;
+}
+
+/* .dateOfLoss {
+    background-image: url(../../assets/img/Status_Sprite_01.png);
+    background-position-x: 0px;
+    background-position-y: 3px;
+    width:48px;
+    height: 46px;
+} */
+
+.dateOfLoss {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: 32px;
+    background-position-y: 63px;
+    width: 77px;
+    height: 51px;
+}
+
+
+
+.pendingStage {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -450px;
+    background-position-y: 7px;
+    width: 106px;
+    height: 51px;
+}
+
+
+
+.pendingStage_approved {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -443px;
+    background-position-y: 7px;
+    width: 106px;
+    height: 51px;
+}
+
+#save .pendingStage,
+#submit .pendingStage {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -444px;
+    background-position-y: 7px;
+    width: 106px;
+    height: 51px;
+}
+
+.status_row {
+    position: relative;
+    top: 30px;
+}
+
+#claimStatus {
+    margin-top: 0px;
+    margin-left: 38px; 
+}
+
+.timeline_container {
+    position: relative;
+    text-align: center;
+}
+
+.icon_position {
+    top: 25px;
+    position: relative;
+}
+
+.progress {
+    margin-left: 90px;
+    width: 83%;
+}
+
+#confirmation_title {
+    margin-top: 55px;
+    text-align: center;
+    font-family: Roboto;
+    font-weight: lighter;
+    font-size: 50px;
+    color:#4470C5;
+}
+
+.modal-body ._ngcontent-c6 {
+    margin-right: 25px;
+}
+
+.claimForm_title {
+    margin-top: 55px;
+    text-align: center;
+    font-family: Roboto;
+    font-weight: lighter;
+    font-size: 50px;
+    color: #4470C5;
+}
+
+.btn {
+    background-color: #6F7700 !important;
+}
+
+.requiredFieldWrapper::after {
+    font-family: 'Glyphicons Halflings';
+    content: '*';
+    position: absolute;
+    top:2px;
+    bottom: 0;
+    right: 17px;
+    font-size: 20px;
+    color:#f44336;
+}
+
+.requiredFieldWrapperDescription::after {
+    font-family: 'Glyphicons Halflings';
+    content: '*';
+    position: absolute;
+    top: 2px;
+    bottom: 0;
+    right: 1008px;
+    font-size: 20px;
+    color:#f44336;
+}
+
+.requiredFieldWrapperAmount::after {
+    font-family: 'Glyphicons Halflings';
+    content: '*';
+    position: absolute;
+    top: 2px;
+    bottom: 0;
+    right: 439px;
+    font-size: 20px;
+    color: #f44336;
+}
+#wrapper {
+    position: relative;   
+}
+
+#overlay {
+    opacity: 0.9;
+    position:absolute;
+    top: 50%;
+    left: 45%;
+    height: 53px;
+}
+
+.navbar-custom {
+    background-color: #333333;
+    height: 85px;
+    width: 100%;
+}
+
+#lmca {
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 24px;
+    color: #FFFFFF;
+    padding: 30px 0px;
+}
+
+.alignment {
+    text-align: right;
+}
+
+a.heading {
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    color: #808080 !important;
+}
+
+.claimDates {
+    margin-bottom: 10px;
+    margin-top: 0px;
+    color: #808080;
+    font-size: 13px;
+    padding-left: 15px;
+}
+
+#exampleModal .claimDates {
+    margin-bottom: 10px;
+    margin-top: 0px;
+    color: #808080;
+    font-size: 13px;
+    padding-left: 4px;
+}
+
+.claimDates_active {
+    color: #666666;
+    font-size: 13px;
+}
+
+.progress_dates {
+    width: 41%;
+    margin-left: 120px;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: #6F7700;
+}
+
+.claim_nonactive {
+    color: #808080;
+    padding-left: 13px;
+}
+
+.claim_active {
+    color: #6F7700;
+    font-weight: bold;
+    padding-left: 13px;
+}
+
+.dates_row {
+    position: relative;
+    top: 87px;
+}
+
+#exampleModal .progress {
+    margin-left: 51px;
+    width: 87%;
+}
+
+#exampleModal #claimStatus {
+    margin-top: 0px;
+    margin-left: 0px;
+    position: relative;
+    top: 25px;
+}
+
+#exampleModal .pendingStage {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -461px;
+    background-position-y: 7px;
+    width: 106px;
+    height: 51px;
+}
+
+#exampleModal .claimSubmitted {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -62px;
+    background-position-y: -73px;
+    width: 88px;
+    height: 51px;
+}
+
+#exampleModal .dateOfLoss {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: 25px;
+    background-position-y: 6px;
+    width: 68px;
+    height: 51px;
+}
+
+#exampleModal  .progress_dates {
+    width: 41%;
+    margin-left: 104px;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 13px;;
+    color: #6F7700;
+}
+
+#exampleModal  .pendingStage {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -464px;
+    background-position-y: 5px;
+    width: 82px;
+    height: 51px;
+}
+
+
+#exampleModal  .claimSubmitted {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -60px;
+    background-position-y: 64px;
+    width: 84px;
+    height: 51px;
+}
+
+#exampleModal  .WithBroker {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -164px;
+    background-position-y: 64px;
+    width: 82px;
+    height: 51px;
+}
+
+#exampleModal  .withInsurer {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -268px;
+    background-position-y: 64px;
+    width: 99px;
+    height: 51px;
+}
+
+#exampleModal  .approved {
+    background-image: url(../../assets/img/Timeline_Sprite_04.png);
+    background-position-x: -364px;
+    background-position-y: 64px;
+    width: 81px;
+    height: 51px;
+}
+
+#exampleModal  .status_pending {
+    color: #B3B3B3;
+    padding-left: 21px;
+    text-align: left;
+}
+
+#exampleModal  .claimDates {
+    margin-bottom: 10px;
+    margin-top: 0px;
+    color: #808080;
+    font-size: 13px;
+    padding-left: 4px;
+}
+
+#exampleModal  .claim_nonactive {
+    color: #808080;
+    padding-left: 21px;
+}
+
+
+
+#exampleModal  .claim_nonactive {
+    color: #808080;
+    padding-left: 0px;
+}
+
+#exampleModal  .progress_dates {
+    width: 55%;
+    margin-left: 66px;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: #6F7700;
+}
+
+#exampleModal  .dates_row {
+    position: relative;
+    top: 89px;
+    margin-left: 30px;
+}
+
+#exampleModal  .claim_active {
+    color: #6F7700;
+    font-weight: bold;
+    padding-left: 0px;
+}
+
+#exampleModal  .progress {
+    margin-left: 51px;
+    width: 84%;
+}
